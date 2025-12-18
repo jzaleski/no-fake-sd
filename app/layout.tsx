@@ -80,8 +80,10 @@ const RootLayout = ({
           {children}
         </main>
         <Footer />
-        <Analytics />
-        <SpeedInsights />
+        {process.env.NEXT_PUBLIC_VERCEL_ANALYTICS_ENABLED === "true" ? <Analytics /> : null}
+        {process.env.NEXT_PUBLIC_VERCEL_SPEED_INSIGHTS_ENABLED === "true" ? (
+          <SpeedInsights />
+        ) : null}
       </body>
     </html>
   );
