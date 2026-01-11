@@ -1,15 +1,25 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState, useEffect, FormEvent } from "react";
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     message: "",
+    timezone: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
+
+  useEffect(() => {
+    try {
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      setFormData(prev => ({ ...prev, timezone }));
+    } catch (_error) {
+      setFormData(prev => ({ ...prev, timezone: "Unknown" }));
+    }
+  }, []);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -30,7 +40,7 @@ const ContactForm = () => {
       }
 
       setSubmitMessage("Thank you for your message! We'll get back to you soon.");
-      setFormData({ name: "", email: "", message: "" });
+      setFormData(prev => ({ ...prev, name: "", email: "", message: "" }));
     } catch (_error) {
       setSubmitMessage(
         "There was an error submitting your message. Please try again or contact us directly.",
